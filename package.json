@@ -1,0 +1,41 @@
+{
+  "name": "@movable/cordova-sdk",
+  "version": "1.1.0",
+  "description": "MovableInk Cordova SDK",
+  "types": "./types/index.d.ts",
+  "cordova": {
+    "id": "com-movableink-cordova-sdk",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": "github:movableink/cordova-sdk",
+  "bugs": "https://github.com/movableink/cordova-sdk/issues",
+  "keywords": [
+    "cordova",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "movableink",
+    "movable ink",
+    "movable-ink"
+  ],
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "eslint ."
+  },
+  "author": "MovableInk",
+  "license": "MIT",
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova": ">100",
+        "cordova-android": ">=12.0.0"
+      }
+    }
+  },
+  "devDependencies": {
+    "@cordova/eslint-config": "^3.0.0"
+  }
+}
