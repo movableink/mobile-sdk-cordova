@@ -1,9 +1,13 @@
 repositories {
     mavenCentral()
     google()
+    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
-    implementation("com.movableink.sdk:inked:1.1.2")
+//   implementation("com.movableink.sdk:inked:1.1.2")
+    implementation("com.movableink.sdk:inked:1.0.5-SNAPSHOT")
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.20'
+
+
 }
