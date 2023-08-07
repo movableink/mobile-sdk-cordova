@@ -10,7 +10,6 @@
       "ios"
     ]
   },
-  "repository": "github:movableink/cordova-sdk",
   "bugs": "https://github.com/movableink/cordova-sdk/issues",
   "keywords": [
     "cordova",
@@ -25,8 +24,12 @@
     "test": "npm run lint",
     "lint": "eslint ."
   },
-  "author": "MovableInk",
+  "repository": "https://github.com/movableink/mobile-sdk-cordova",
+  "author": "MovableInk <dev@movableink.com> (https://github.com/movableink)",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "engines": {
     "cordovaDependencies": {
       "3.0.0": {
