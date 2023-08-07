@@ -5,10 +5,10 @@
         <clobbers target="MovableInk" />
     </js-module>
 
-    <!-- <engines>
-      <engine name="cordova" version=">=12.0.0"/>
-      <engine name="cordova-android" version=">=12.0.0"/>
-    </engines> -->
+    <engines>
+        <engine name="cordova" version=">=12.0.0"/>
+        <engine name="cordova-android" version=">=12.0.0"/>
+    </engines>
 
     <platform name="ios">
       <podspec>
@@ -24,7 +24,7 @@
         <feature name="MovableInkClient">
           <param name="ios-package" value="MovableInkClient" />
           <param name="onload" value="true" />
-        </feature>        
+        </feature>
       </config-file>
 
       <source-file src="src/ios/MovableInkClient.swift" />
@@ -33,24 +33,21 @@
     </platform>
 
     <platform name="android">
-      <framework src="com.movableink.sdk:inked:1.1.2" />
-      <framework src="src/android/app.gradle" custom="true" type="gradleReference" />
-      
-      <config-file parent="/*" target="AndroidManifest.xml">
-          <uses-permission android:name="android.permission.INTERNET" />
-      </config-file>
-      
-      <config-file target="res/xml/config.xml" parent="/*">
-          <preference name="GradlePluginKotlinEnabled" value="true" />
-          
-          <feature name="MovableInkClient">
-              <param name="android-package" value="android.com.movableink.app.MovablePlugin"/>
-          </feature>
-      </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.INTERNET" />
+        </config-file>
+        <config-file target="res/xml/config.xml" parent="/*">
+            <preference name="GradlePluginKotlinEnabled" value="true" />
+            <feature name="MovableInkClient">
+                <param name="android-package" value="android.com.movableink.app.MovablePlugin"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/com/movableink/app/MovablePlugin.kt"
+                     target-dir="src/com/movableink/app/"/>
 
-      <source-file src="src/android/com/movableink/app/MovablePlugin.kt"
-                   target-dir="src/com/movableink/app/"/>
-      <source-file src="src/android/com/movableink/app/Keys.kt"
-                   target-dir="src/com/movableink/app/"/>
+        <source-file src="src/android/com/movableink/app/Keys.kt"
+                     target-dir="src/com/movableink/app/"/>
+        <framework src="src/android/app.gradle" custom="true" type="gradleReference" />
+
     </platform>
 </plugin>
