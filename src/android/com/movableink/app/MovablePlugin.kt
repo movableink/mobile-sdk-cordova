@@ -1,15 +1,9 @@
+
 package android.com.movableink.app
+
 import android.content.Intent
 import android.util.Log
-import com.movableink.app.CATEGORY_VIEWED
-import com.movableink.app.IDENTIFY_USER
-import com.movableink.app.LOG_EVENT
-import com.movableink.app.ORDER_COMPLETED
-import com.movableink.app.PRODUCT_ADDED
-import com.movableink.app.PRODUCT_SEARCHED
-import com.movableink.app.PRODUCT_VIEWED
-import com.movableink.app.RETRIEVE_LAST_RESOLVED_URL
-import com.movableink.app.SET_MIU
+import com.movableink.app.*
 import com.movableink.inked.MIClient
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
@@ -18,10 +12,12 @@ import org.apache.cordova.CordovaWebView
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 
 const val TAG = "MovablePlugin"
 
 class MovablePlugin : CordovaPlugin() {
+  private var deepLinkListener: CallbackContext? = null
 
   override fun initialize(cordova: CordovaInterface?, webView: CordovaWebView?) {
     super.initialize(cordova, webView)
@@ -39,19 +35,20 @@ class MovablePlugin : CordovaPlugin() {
   }
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
+    cordova.activity.intent = intent
     handleIntent(intent)
   }
 
-  private fun resolveURL(url: String): String? {
-    var resolvedLink: String? = null
+  private fun resolveURL(url: String) {
     MIClient.resolveUrlAsync(url) { urlString ->
-      // callBack
-      resolvedLink = urlString
-      Log.d(TAG, "Resolved URL:$resolvedLink ")
-//            val result = PluginResult(PluginResult.Status.OK, resolvedLink)
-//            callbackContext.sendPluginResult(result)
+      urlString?.let {
+        Log.d(TAG, "Resolved URL:$urlString ")
+        val result = PluginResult(PluginResult.Status.OK, it)
+        result.keepCallback = true
+        deepLinkListener?.sendPluginResult(result)
+      }
+
     }
-    return resolvedLink
   }
 
   override fun execute(
@@ -60,6 +57,9 @@ class MovablePlugin : CordovaPlugin() {
     callbackContext: CallbackContext,
   ): Boolean {
     when (action) {
+      START -> {
+        return start(callbackContext)
+      }
       SET_MIU -> {
         return setMiu(args)
       }
@@ -165,18 +165,52 @@ class MovablePlugin : CordovaPlugin() {
     MIClient.logEvent(eventName, eventProperties)
     return true
   }
+  private fun start(callback: CallbackContext): Boolean {
+    deepLinkListener = callback
+    return true
+  }
   private fun JSONArray.readProperties(): Map<String, Any?> {
     val map = HashMap<String, Any?>()
     try {
-      for (i in 0 until length()) {
-        val key = getString(i)
-        val value = get(i + 1)
-        map[key] = value
-      }
-    } catch (e: JSONException) {
+      val jsonString = this.getString(0)
+      val jsonObject = JSONObject(jsonString)
+      return jsonObject.toMap()
+    } catch (e: Exception) {
       e.printStackTrace()
     }
 
     return map
+  }
+
+  @Throws(JSONException::class)
+  fun JSONObject.toMap(): Map<String, Any?> {
+    val map: MutableMap<String, Any> = HashMap()
+    val keys: Iterator<String> = keys()
+    while (keys.hasNext()) {
+      val key = keys.next()
+      var value: Any = get(key)
+      if (value is JSONArray) {
+        value = toList(value as JSONArray)
+      } else if (value is JSONObject) {
+        value = (value as JSONObject).toMap()
+      }
+      map[key] = value
+    }
+    return map
+  }
+
+  @Throws(JSONException::class)
+  fun toList(array: JSONArray): List<Any?> {
+    val list: MutableList<Any> = ArrayList()
+    for (i in 0 until array.length()) {
+      var value: Any = array.get(i)
+      if (value is JSONArray) {
+        value = toList(value)
+      } else if (value is JSONObject) {
+        value = value.toMap()
+      }
+      list.add(value)
+    }
+    return list
   }
 }

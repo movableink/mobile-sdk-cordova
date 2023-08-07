@@ -38,7 +38,7 @@
         </config-file>
         <config-file target="res/xml/config.xml" parent="/*">
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <feature name="MovableInk">
+            <feature name="MovableInkClient">
                 <param name="android-package" value="android.com.movableink.app.MovablePlugin"/>
             </feature>
         </config-file>
