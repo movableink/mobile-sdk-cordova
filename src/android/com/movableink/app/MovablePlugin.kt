@@ -1,5 +1,5 @@
 
-package android.com.movableink.app
+package com.movableink.app
 
 import android.content.Intent
 import android.util.Log
