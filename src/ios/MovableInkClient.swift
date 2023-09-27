@@ -120,6 +120,15 @@ class MovableInkClient: CDVPlugin {
     
     MIClient.productAdded(properties)
   }
+
+  @objc(productRemoved:)
+  public func productRemoved(command: CDVInvokedUrlCommand) {
+    guard let properties = try? guardProperties(command: command) else {
+      return
+    }
+    
+    MIClient.productRemoved(properties)
+  }
   
   @objc(orderCompleted:)
   public func orderCompleted(command: CDVInvokedUrlCommand) {
