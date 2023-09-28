@@ -69,6 +69,9 @@ class MovablePlugin : CordovaPlugin() {
       PRODUCT_VIEWED -> {
         return productViewed(args, callbackContext)
       }
+      PRODUCT_REMOVED -> {
+        return productRemoved(args, callbackContext)
+      }
       CATEGORY_VIEWED -> {
         return categoryViewed(args, callbackContext)
       }
@@ -115,6 +118,14 @@ class MovablePlugin : CordovaPlugin() {
   private fun productViewed(parameters: JSONArray, callbackContext: CallbackContext): Boolean {
     val properties = parameters.readProperties()
     MIClient.productViewed(properties)
+    val pluginResult = PluginResult(PluginResult.Status.OK)
+    pluginResult.keepCallback = false
+    callbackContext.sendPluginResult(pluginResult)
+    return true
+  }
+  private fun productRemoved(parameters: JSONArray, callbackContext: CallbackContext): Boolean {
+    val properties = parameters.readProperties()
+    MIClient.productRemoved(properties)
     val pluginResult = PluginResult(PluginResult.Status.OK)
     pluginResult.keepCallback = false
     callbackContext.sendPluginResult(pluginResult)
