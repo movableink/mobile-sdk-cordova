@@ -80,18 +80,6 @@ MovableInk.prototype.productAdded = function (properties) {
   );
 };
 
-MovableInk.prototype.productRemoved = function (properties) {
-  exec(
-    function () {},
-    function (err) {
-      console.log(err);
-    },
-    "MovableInkClient",
-    "productRemoved",
-    [properties]
-  );
-};
-
 MovableInk.prototype.productViewed = function (properties) {
   exec(
     function () {},
