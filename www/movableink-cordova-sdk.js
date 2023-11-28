@@ -116,4 +116,16 @@ MovableInk.prototype.productSearched = function (properties) {
   );
 };
 
+MovableInk.prototype.checkPasteboardOnInstall = function () {
+  exec(
+    function () {},
+    function (err) {
+      console.log(err);
+    },
+    "MovableInkClient",
+    "checkPasteboardOnInstall",
+    []
+  );
+}
+
 module.exports = new MovableInk();
