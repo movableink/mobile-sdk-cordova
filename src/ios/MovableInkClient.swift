@@ -78,6 +78,20 @@ class MovableInkClient: CDVPlugin {
       }
     }
   }
+
+  @objc(checkPasteboardOnInstall:)
+  public func checkPasteboardOnInstall(command: CDVInvokedUrlCommand) {
+    let callbackId = command.callbackId
+
+    Task {
+      let value = await MIClient.checkPasteboardOnInstall()
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_OK,
+        messageAs: value?.absoluteString
+      )
+      self.commandDelegate.send(pluginResult, callbackId: callbackId)
+    }
+  }
   
   private func guardProperties(command: CDVInvokedUrlCommand) throws -> [String: Any] {
     guard let properties = command.argument(at: 0) as? [String: Any] else {
@@ -183,10 +197,5 @@ class MovableInkClient: CDVPlugin {
     }
     
     MIClient.setMIU(value)
-  }
-
-  @objc(checkPasteboardOnInstall:)
-  public func checkPasteboardOnInstall(command: CDVInvokedUrlCommand) {
-    MIClient.checkPasteboardOnInstall()
   }
 }
