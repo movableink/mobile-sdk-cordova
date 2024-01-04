@@ -3,7 +3,6 @@ import MovableInk
 
 @objc(MovableInkClient)
 class MovableInkClient: CDVPlugin {
-  
   enum Errors: Error {
     case invalidArguments
   }
@@ -77,6 +76,20 @@ class MovableInkClient: CDVPlugin {
         
         self.commandDelegate?.send(pluginResult, callbackId: callbackId)
       }
+    }
+  }
+
+  @objc(checkPasteboardOnInstall:)
+  public func checkPasteboardOnInstall(command: CDVInvokedUrlCommand) {
+    let callbackId = command.callbackId
+
+    Task {
+      let value = await MIClient.checkPasteboardOnInstall()
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_OK,
+        messageAs: value?.absoluteString
+      )
+      self.commandDelegate.send(pluginResult, callbackId: callbackId)
     }
   }
   

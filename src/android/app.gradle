@@ -4,7 +4,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.movableink.sdk:inked:1.2.0")
+    implementation("com.movableink.sdk:inked:1.2.2-SNAPSHOT")
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.20'
 
 

@@ -90,6 +90,9 @@ class MovablePlugin : CordovaPlugin() {
       LOG_EVENT -> {
         return logEvent(args)
       }
+      CHECK_PASTEBOARD_ON_INSTALL->{
+        return checkPasteboardOnInstall(callbackContext)
+      }
     }
     return false
   }
@@ -156,6 +159,14 @@ class MovablePlugin : CordovaPlugin() {
   }
   private fun lastResolvedUrl(callbackContext: CallbackContext): Boolean {
     val url = MIClient.retrieveStoredDeepLink()
+    val result = PluginResult(PluginResult.Status.OK, url)
+    result.keepCallback = false
+
+    callbackContext.sendPluginResult(result)
+    return true
+  }
+  private fun checkPasteboardOnInstall(callbackContext: CallbackContext): Boolean {
+    val url = MIClient.checkPasteboardOnInstall()
     val result = PluginResult(PluginResult.Status.OK, url)
     result.keepCallback = false
 
