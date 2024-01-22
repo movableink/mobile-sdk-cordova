@@ -47,7 +47,6 @@ class MovablePlugin : CordovaPlugin() {
         result.keepCallback = true
         deepLinkListener?.sendPluginResult(result)
       }
-
     }
   }
 
@@ -90,6 +89,9 @@ class MovablePlugin : CordovaPlugin() {
       LOG_EVENT -> {
         return logEvent(args)
       }
+      CHECK_PASTEBOARD_ON_INSTALL -> {
+        return checkPasteboardOnInstall(callbackContext)
+      }
     }
     return false
   }
@@ -107,6 +109,7 @@ class MovablePlugin : CordovaPlugin() {
     MIClient.setMIU(miu)
     return true
   }
+
   private fun orderCompleted(parameters: JSONArray, callbackContext: CallbackContext): Boolean {
     val properties = parameters.readProperties()
     MIClient.orderCompleted(properties)
@@ -115,6 +118,7 @@ class MovablePlugin : CordovaPlugin() {
     callbackContext.sendPluginResult(pluginResult)
     return true
   }
+
   private fun productViewed(parameters: JSONArray, callbackContext: CallbackContext): Boolean {
     val properties = parameters.readProperties()
     MIClient.productViewed(properties)
@@ -123,6 +127,7 @@ class MovablePlugin : CordovaPlugin() {
     callbackContext.sendPluginResult(pluginResult)
     return true
   }
+
   private fun productRemoved(parameters: JSONArray, callbackContext: CallbackContext): Boolean {
     val properties = parameters.readProperties()
     MIClient.productRemoved(properties)
@@ -131,6 +136,7 @@ class MovablePlugin : CordovaPlugin() {
     callbackContext.sendPluginResult(pluginResult)
     return true
   }
+
   private fun categoryViewed(parameters: JSONArray, callbackContext: CallbackContext): Boolean {
     val properties = parameters.readProperties()
     MIClient.categoryViewed(properties)
@@ -145,15 +151,18 @@ class MovablePlugin : CordovaPlugin() {
     MIClient.productSearched(properties)
     return true
   }
+
   private fun productAdded(parameters: JSONArray): Boolean {
     val properties = parameters.readProperties()
     MIClient.productAdded(properties)
     return true
   }
+
   private fun identifyUser(): Boolean {
     MIClient.identifyUser()
     return true
   }
+
   private fun lastResolvedUrl(callbackContext: CallbackContext): Boolean {
     val url = MIClient.retrieveStoredDeepLink()
     val result = PluginResult(PluginResult.Status.OK, url)
@@ -162,6 +171,16 @@ class MovablePlugin : CordovaPlugin() {
     callbackContext.sendPluginResult(result)
     return true
   }
+
+  private fun checkPasteboardOnInstall(callbackContext: CallbackContext): Boolean {
+    val url = MIClient.checkPasteboardOnInstall()
+    val result = PluginResult(PluginResult.Status.OK, url)
+    result.keepCallback = false
+
+    callbackContext.sendPluginResult(result)
+    return true
+  }
+
   private fun logEvent(parameters: JSONArray): Boolean {
     val eventName: String? = try {
       parameters.getString(0)
@@ -169,17 +188,21 @@ class MovablePlugin : CordovaPlugin() {
       e.printStackTrace()
       return true
     }
+
     val eventProperties = parameters.readProperties()
     if (eventName.isNullOrEmpty()) {
       return true
     }
+
     MIClient.logEvent(eventName, eventProperties)
     return true
   }
+
   private fun start(callback: CallbackContext): Boolean {
     deepLinkListener = callback
     return true
   }
+
   private fun JSONArray.readProperties(): Map<String, Any?> {
     val map = HashMap<String, Any?>()
     try {
