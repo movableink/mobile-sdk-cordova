@@ -79,6 +79,30 @@ class MovableInkClient: CDVPlugin {
     }
   }
 
+  @objc(showInAppMessage:)
+  public func showInAppMessage(command: CDVInvokedUrlCommand) {
+    let callbackId = command.callbackId
+    
+    guard let urlString = command.argument(at: 0) as? String, let url = URL(string: urlString) else {
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_ERROR
+      )
+
+      self.commandDelegate?.send(pluginResult, callbackId: callbackId)
+
+      return
+    }
+
+    MIClient.showInAppMessage(with: url) { buttonID in
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_OK,
+        messageAs: buttonID
+      )
+
+      self.commandDelegate?.send(pluginResult, callbackId: callbackId)
+    }
+  }
+
   @objc(checkPasteboardOnInstall:)
   public func checkPasteboardOnInstall(command: CDVInvokedUrlCommand) {
     let callbackId = command.callbackId
