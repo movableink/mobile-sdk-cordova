@@ -25,6 +25,9 @@ class MovablePlugin : CordovaPlugin() {
     MIClient.start()
   }
 
+  private fun getActivity(): Activity? {
+    return cordova?.activity
+  }
   private fun handleIntent(intent: Intent?) {
     intent?.let {
       if (it.action == Intent.ACTION_VIEW) {
@@ -192,9 +195,19 @@ class MovablePlugin : CordovaPlugin() {
       e.printStackTrace()
       return true
     }
+    url?.let { urlToDisplay ->
+      MIClient.showInAppBrowser(
+        getActivity(),
+        urlToDisplay,
+        listener = object : MovableInAppClient.OnUrlLoadingListener {
+          override fun onButtonClicked(value: String) {
+            result.keepCallback = false
 
-    // TODO: implement
-
+            callbackContext.sendPluginResult(value)
+          }
+        },
+      )
+    }
     return true
   }
 
