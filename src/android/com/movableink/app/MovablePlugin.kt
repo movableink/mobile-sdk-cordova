@@ -25,6 +25,9 @@ class MovablePlugin : CordovaPlugin() {
     MIClient.start()
   }
 
+  private fun getActivity(): Activity? {
+    return cordova?.activity
+  }
   private fun handleIntent(intent: Intent?) {
     intent?.let {
       if (it.action == Intent.ACTION_VIEW) {
@@ -42,7 +45,6 @@ class MovablePlugin : CordovaPlugin() {
   private fun resolveURL(url: String) {
     MIClient.resolveUrlAsync(url) { urlString ->
       urlString?.let {
-        Log.d(TAG, "Resolved URL:$urlString ")
         val result = PluginResult(PluginResult.Status.OK, it)
         result.keepCallback = true
         deepLinkListener?.sendPluginResult(result)
@@ -92,6 +94,9 @@ class MovablePlugin : CordovaPlugin() {
       CHECK_PASTEBOARD_ON_INSTALL -> {
         return checkPasteboardOnInstall(callbackContext)
       }
+      SHOW_IN_APP_MESSAGE -> {
+        return showInAppMessage(args, callbackContext)
+      }
     }
     return false
   }
@@ -103,9 +108,11 @@ class MovablePlugin : CordovaPlugin() {
       e.printStackTrace()
       return true
     }
+
     if (miu.isNullOrEmpty()) {
       return true
     }
+    
     MIClient.setMIU(miu)
     return true
   }
@@ -178,6 +185,29 @@ class MovablePlugin : CordovaPlugin() {
     result.keepCallback = false
 
     callbackContext.sendPluginResult(result)
+    return true
+  }
+
+  private fun showInAppMessage(parameters: JSONArray, callbackContext: CallbackContext): Boolean  {
+    val url: String? = try {
+      parameters.getString(0)
+    } catch (e: JSONException) {
+      e.printStackTrace()
+      return true
+    }
+    url?.let { urlToDisplay ->
+      MIClient.showInAppBrowser(
+        getActivity(),
+        urlToDisplay,
+        listener = object : MovableInAppClient.OnUrlLoadingListener {
+          override fun onButtonClicked(value: String) {
+            result.keepCallback = false
+
+            callbackContext.sendPluginResult(value)
+          }
+        },
+      )
+    }
     return true
   }
 

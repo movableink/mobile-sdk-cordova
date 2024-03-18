@@ -128,4 +128,17 @@ MovableInk.prototype.checkPasteboardOnInstall = function (callback) {
   );
 }
 
+MovableInk.prototype.showInAppMessage = function (url, callback) {
+  exec(
+    callback,
+    function (err) {
+      console.log(err);
+    },
+    "MovableInkClient",
+    "showInAppMessage",
+    [url]
+  );
+};
+
+
 module.exports = new MovableInk();

@@ -15,4 +15,5 @@ const val RETRIEVE_LAST_RESOLVED_URL = "retrieveStoredDeeplink"
 const val START = "start"
 const val KEY_EVENT_NAME = "name"
 const val CHECK_PASTEBOARD_ON_INSTALL = "checkPasteboardOnInstall"
+const val SHOW_IN_APP_MESSAGE = "showInAppMessage"
 
