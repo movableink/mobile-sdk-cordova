@@ -97,6 +97,10 @@ class MovablePlugin : CordovaPlugin() {
       SHOW_IN_APP_MESSAGE -> {
         return showInAppMessage(args, callbackContext)
       }
+      SET_VALID_PASTEBOARD_VALUES -> {
+        setValidPasteboardValues(args)
+        return true
+      }
     }
     return false
   }
@@ -231,6 +235,10 @@ class MovablePlugin : CordovaPlugin() {
   private fun start(callback: CallbackContext): Boolean {
     deepLinkListener = callback
     return true
+  }
+
+  private fun setValidPasteboardValues(values: JSONArray) {
+    MIClient.validPasteboardValues(toList(values))
   }
 
   private fun JSONArray.readProperties(): Map<String, Any?> {

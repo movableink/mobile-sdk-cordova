@@ -222,4 +222,9 @@ class MovableInkClient: CDVPlugin {
     
     MIClient.setMIU(value)
   }
+
+  @objc(setValidPasteboardValues:)
+  public func setValidPasteboardValues(values: [String]) {
+    MIClient.validPasteboardValues = values
+  }
 }
