@@ -152,4 +152,16 @@ MovableInk.prototype.setValidPasteboardValues = function (values) {
   )
 }
 
+MovableInk.prototype.setAppInstallEventEnabled = function (enabled) {
+  exec(
+    function () {},
+    function (err) {
+      console.log(err)
+    },
+    'MovableInkClient',
+    'setAppInstallEventEnabled',
+    [enabled]
+  )
+}
+
 module.exports = new MovableInk();

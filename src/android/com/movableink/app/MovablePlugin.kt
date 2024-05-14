@@ -101,6 +101,10 @@ class MovablePlugin : CordovaPlugin() {
         setValidPasteboardValues(args)
         return true
       }
+      SET_APP_INSTALL_EVENT_ENABLED -> {
+        setAppInstallEventEnabled(args)
+        return true
+      }
     }
     return false
   }
@@ -239,6 +243,17 @@ class MovablePlugin : CordovaPlugin() {
 
   private fun setValidPasteboardValues(values: JSONArray) {
     MIClient.validPasteboardValues(toList(values))
+  }
+
+  private fun setAppInstallEventEnabled(parameters: JSONArray) {
+    val enabled: Boolean? = try {
+      parameters.getString(0)
+    } catch (e: JSONException) {
+      e.printStackTrace()
+      return true
+    }
+
+    MIClient.appInstallEventEnabled(enabled)
   }
 
   private fun JSONArray.readProperties(): Map<String, Any?> {
