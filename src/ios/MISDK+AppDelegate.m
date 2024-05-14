@@ -17,7 +17,7 @@ static BOOL isOriginalOpenURLOptionsExist;
     dispatch_once(&onceToken, ^{
 
         SEL originalSelector = @selector(application:continueUserActivity:restorationHandler:);
-        SEL swizzledSelector = @selector(mi_application: continueUserActivity: restorationHandler:);
+        SEL swizzledSelector = @selector(mi_application:continueUserActivity:restorationHandler:);
         [self addSwizzledMethodWithOriginalSelector:originalSelector swizzledSelector:swizzledSelector methodExistFlag:&isOriginalContinueUserActivityExist];
 
         SEL originalSelector3 = @selector(application:openURL:options:);

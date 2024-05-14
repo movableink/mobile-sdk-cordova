@@ -222,4 +222,35 @@ class MovableInkClient: CDVPlugin {
     
     MIClient.setMIU(value)
   }
+
+  @objc(setValidPasteboardValues:)
+  public func setValidPasteboardValues(command: CDVInkovedUrlCommand) {
+    guard let values = command.argument(at: 0) as? [String] else {
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_ERROR
+      )
+
+      self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
+
+      return
+    }
+
+
+    MIClient.validPasteboardValues = values
+  }
+
+  @objc(setAppInstallEventEnabled:)
+  public func setAppInstallEventEnabled(command: CDVInkovedUrlCommand) {
+    guard let enabled = command.argument(at: 0) as? Bool else {
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_ERROR
+      )
+
+      self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
+
+      return
+    }
+
+    MIClient.appInstallEventEnabled = enabled
+  }
 }

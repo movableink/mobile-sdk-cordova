@@ -140,5 +140,28 @@ MovableInk.prototype.showInAppMessage = function (url, callback) {
   );
 };
 
+MovableInk.prototype.setValidPasteboardValues = function (values) {
+  exec(
+    function () {},
+    function (err) {
+      console.log(err)
+    },
+    'MovableInkClient',
+    'setValidPasteboardValues',
+    [values]
+  )
+}
+
+MovableInk.prototype.setAppInstallEventEnabled = function (enabled) {
+  exec(
+    function () {},
+    function (err) {
+      console.log(err)
+    },
+    'MovableInkClient',
+    'setAppInstallEventEnabled',
+    [enabled]
+  )
+}
 
 module.exports = new MovableInk();

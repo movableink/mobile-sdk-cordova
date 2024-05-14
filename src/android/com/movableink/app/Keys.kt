@@ -16,4 +16,5 @@ const val START = "start"
 const val KEY_EVENT_NAME = "name"
 const val CHECK_PASTEBOARD_ON_INSTALL = "checkPasteboardOnInstall"
 const val SHOW_IN_APP_MESSAGE = "showInAppMessage"
-
+const val SET_VALID_PASTEBOARD_VALUES = "setValidPasteboardValues"
+const val SET_APP_INSTALL_EVENT_ENABLED = "setAppInstallEventEnabled"
