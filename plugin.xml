@@ -16,7 +16,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="MovableInk" spec="1.6.3" />
+                <pod name="MovableInk" spec="1.6.4" />
             </pods>
         </podspec>
 
