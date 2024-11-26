@@ -30,10 +30,6 @@ MovableInk.prototype.setMIU = function (value) {
   exec(function() {}, function (err) { console.log(err); }, "MovableInkClient", "setMIU", [value]);
 };
 
-MovableInk.prototype.identifyUser = function () {
-  exec(function () {}, function (err) {}, "MovableInkClient", "identifyUser", []);
-};
-
 MovableInk.prototype.logEvent = function (name, properties) {
   exec(
     function () {},

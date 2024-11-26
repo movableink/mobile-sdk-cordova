@@ -12,21 +12,23 @@ class MovableInkClient: CDVPlugin {
   override func pluginInitialize() {
     super.pluginInitialize()
     
-    MIClient.start { [weak self] result in
-      guard let self, let deeplinkListener = self.deeplinkListener else { return }
-      
-      switch result {
-      case let .success(url):
-        let pluginResult = CDVPluginResult(
-          status: CDVCommandStatus_OK,
-          messageAs: url
-        )
+    Task { @MainActor in
+      MIClient.start { [weak self] result in
+        guard let self, let deeplinkListener = self.deeplinkListener else { return }
         
-        pluginResult?.setKeepCallbackAs(true)
-        self.commandDelegate?.send(pluginResult, callbackId: deeplinkListener)
-        
-      default:
-        break
+        switch result {
+        case let .success(url):
+          let pluginResult = CDVPluginResult(
+            status: CDVCommandStatus_OK,
+            messageAs: url
+          )
+          
+          pluginResult?.setKeepCallbackAs(true)
+          self.commandDelegate?.send(pluginResult, callbackId: deeplinkListener)
+          
+        default:
+          break
+        }
       }
     }
   }
@@ -38,12 +40,14 @@ class MovableInkClient: CDVPlugin {
 
   @objc(retrieveStoredDeeplink:)
   func retrieveStoredDeeplink(command: CDVInvokedUrlCommand) {
-    let pluginResult = CDVPluginResult(
-      status: CDVCommandStatus_OK,
-      messageAs: MIClient.storedDeeplink ?? ""
-    )
-    
-    self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
+    Task { @MainActor in
+      let pluginResult = CDVPluginResult(
+        status: CDVCommandStatus_OK,
+        messageAs: MIClient.storedDeeplink ?? ""
+      )
+      
+      self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
+    }
   }
   
   @objc(resolveUrl:)
@@ -93,13 +97,15 @@ class MovableInkClient: CDVPlugin {
       return
     }
 
-    MIClient.showInAppMessage(with: url) { buttonID in
-      let pluginResult = CDVPluginResult(
-        status: CDVCommandStatus_OK,
-        messageAs: buttonID
-      )
-
-      self.commandDelegate?.send(pluginResult, callbackId: callbackId)
+    Task { @MainActor in
+      MIClient.showInAppMessage(with: url) { buttonID in
+        let pluginResult = CDVPluginResult(
+          status: CDVCommandStatus_OK,
+          messageAs: buttonID
+        )
+        
+        self.commandDelegate?.send(pluginResult, callbackId: callbackId)
+      }
     }
   }
 
@@ -137,7 +143,9 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.productSearched(properties)
+    Task { @MainActor in
+      MIClient.productSearched(properties)
+    }
   }
   
   @objc(productViewed:)
@@ -146,7 +154,9 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.productViewed(properties)
+    Task { @MainActor in
+      MIClient.productViewed(properties)
+    }
   }
   
   @objc(productAdded:)
@@ -155,7 +165,9 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.productAdded(properties)
+    Task { @MainActor in
+      MIClient.productAdded(properties)
+    }
   }
 
   @objc(productRemoved:)
@@ -164,7 +176,9 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.productRemoved(properties)
+    Task { @MainActor in
+      MIClient.productRemoved(properties)
+    }
   }
   
   @objc(orderCompleted:)
@@ -173,7 +187,9 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.orderCompleted(properties)
+    Task { @MainActor in
+      MIClient.orderCompleted(properties)
+    }
   }
   
   @objc(categoryViewed:)
@@ -182,7 +198,9 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.categoryViewed(properties)
+    Task { @MainActor in
+      MIClient.categoryViewed(properties)
+    }
   }
   
   @objc(logEvent:)
@@ -199,12 +217,14 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.logEvent(name: name, properties: properties)
+    Task { @MainActor in
+      MIClient.logEvent(name: name, properties: properties)
+    }
   }
   
   @objc(identifyUser:)
   public func identifyUser(command: CDVInvokedUrlCommand) {
-    MIClient.identifyUser()
+    
   }
   
   @objc(setMIU:)
@@ -220,37 +240,8 @@ class MovableInkClient: CDVPlugin {
       return
     }
     
-    MIClient.setMIU(value)
-  }
-
-  @objc(setValidPasteboardValues:)
-  public func setValidPasteboardValues(command: CDVInkovedUrlCommand) {
-    guard let values = command.argument(at: 0) as? [String] else {
-      let pluginResult = CDVPluginResult(
-        status: CDVCommandStatus_ERROR
-      )
-
-      self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
-
-      return
+    Task { @MainActor in
+      MIClient.setMIU(value)
     }
-
-
-    MIClient.validPasteboardValues = values
-  }
-
-  @objc(setAppInstallEventEnabled:)
-  public func setAppInstallEventEnabled(command: CDVInkovedUrlCommand) {
-    guard let enabled = command.argument(at: 0) as? Bool else {
-      let pluginResult = CDVPluginResult(
-        status: CDVCommandStatus_ERROR
-      )
-
-      self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
-
-      return
-    }
-
-    MIClient.appInstallEventEnabled = enabled
   }
 }

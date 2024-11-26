@@ -83,7 +83,7 @@ class MovablePlugin : CordovaPlugin() {
         return productAdded(args)
       }
       IDENTIFY_USER -> {
-        return identifyUser()
+        return true
       }
       RETRIEVE_LAST_RESOLVED_URL -> {
         return lastResolvedUrl(callbackContext)
