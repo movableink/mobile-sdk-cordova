@@ -1,6 +1,6 @@
 {
   "name": "@movable/cordova-sdk",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "MovableInk Cordova SDK",
   "types": "./types/index.d.ts",
   "cordova": {
